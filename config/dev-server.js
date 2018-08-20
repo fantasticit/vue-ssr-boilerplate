@@ -43,7 +43,7 @@ module.exports = function setupDevServer(app, cb) {
   app.use(devServer)
   app.use(hotMiddleware(clientCompiler, { heartbeat: 5000, log: console.log }))
 
-  clientCompiler.plugin('done', (err, stats) => {
+  clientCompiler.plugin('done', _ => {
     clientManifest = JSON.parse(
       readFile(devServer.fileSystem, 'vue-ssr-client-manifest.json')
     )

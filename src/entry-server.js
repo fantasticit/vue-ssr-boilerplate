@@ -1,6 +1,5 @@
 // 仅运行于服务器
 import { createApp } from './app'
-import { resolve } from 'url'
 
 export default context => {
   // 因为有可能是 异步路由钩子或组件，返回一个 promise

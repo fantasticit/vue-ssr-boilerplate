@@ -11,5 +11,5 @@ if (window.__INITIAL_STATE__) {
 // App.vue 模板中跟元素具有 `id="app"`
 router.onReady(_ => {
   console.log('client entry')
-  app.$mount('#app')
+  app.$mount('#app') // 客户端激活
 })
