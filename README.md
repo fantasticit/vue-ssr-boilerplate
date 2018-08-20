@@ -1,4 +1,4 @@
-# vue-ssr
+# vue-ssr-boilerplate
 
 ### A boilerplate for developing Server Side Render Vue.js Application
 
