@@ -1,9 +1,13 @@
+process.noDeprecation = true
+process.env.VUE_ENV = 'client'
+
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const UglyfyJsPlugin = require('uglifyjs-webpack-plugin')
-const baseConfig = require('./webpack.base')
+const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
+const baseConfig = require('./webpack.base')
 
 const clientConfig = merge(baseConfig, {
   entry: {
@@ -49,15 +53,22 @@ if (process.env.NODE_ENV === 'production') {
         chunks: 'initial',
         name: 'vendor',
         priority: 10,
-        enforce: true,
-        minChunks: function(module) {
-          returnn(
-            /node_modules/.test(module.context) && !/\.css/.test(module.request)
-          )
-        }
+        enforce: true
       }
     }
   }
+
+  clientConfig.plugins.push(
+    new SWPrecachePlugin({
+      cacheId: 'vue-ssr-justemit',
+      filename: 'service-worker.js',
+      minify: true,
+      // 设置为 false, sw生成的缓存是 filename?hash 形式，以便于浏览器更新缓存
+      dontCacheBustUrlsMatching: false,
+      // 忽略文件
+      staticFileGlobsIgnorePatterns: [/\.map$/, /\.css$/]
+    })
+  )
 }
 
 module.exports = clientConfig

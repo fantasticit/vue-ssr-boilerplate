@@ -19,12 +19,14 @@ export function createRouter() {
 
       {
         path: '/page2',
-        component: () => import('../views/page2.vue')
+        component: () =>
+          import(/* webpackChunkName: 'page2' */ '../views/page2.vue')
       },
 
       {
         path: '*',
-        component: () => import('../views/notFound.vue')
+        component: () =>
+          import(/* webpackChunkName: 'notFound' */ '../views/notFound.vue')
       }
     ]
   })

@@ -16,6 +16,7 @@ export default {}
 
 <style lang="stylus">
 #app {
+  // background: url('./assets/bg.jpg');
   text-align: center;
 
   img {

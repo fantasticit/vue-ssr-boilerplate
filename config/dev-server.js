@@ -1,4 +1,6 @@
-const fs = require('fs')
+// 如果使用了 弃用 的API，暂时先不要警告
+process.noDeprecation = true
+
 const path = require('path')
 const MFS = require('memory-fs')
 const webpack = require('webpack')
@@ -26,6 +28,7 @@ module.exports = function setupDevServer(app, cb) {
     }
   }
 
+  // 客户端入口打包及 HMR 配置
   clientConfig.entry.app = [
     'webpack-hot-middleware/client?reload=true',
     clientConfig.entry.app
@@ -34,7 +37,6 @@ module.exports = function setupDevServer(app, cb) {
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
   )
-
   const clientCompiler = webpack(clientConfig)
   const devServer = devMiddleware(clientCompiler, {
     noInfo: true,
@@ -42,7 +44,6 @@ module.exports = function setupDevServer(app, cb) {
   })
   app.use(devServer)
   app.use(hotMiddleware(clientCompiler, { heartbeat: 5000, log: console.log }))
-
   clientCompiler.plugin('done', _ => {
     clientManifest = JSON.parse(
       readFile(devServer.fileSystem, 'vue-ssr-client-manifest.json')
@@ -50,6 +51,7 @@ module.exports = function setupDevServer(app, cb) {
     update()
   })
 
+  // 服务器入口打包
   const serverCompiler = webpack(serverConfig)
   const mfs = new MFS()
   serverCompiler.outputFileSystem = mfs

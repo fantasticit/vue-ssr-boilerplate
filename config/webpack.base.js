@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
@@ -35,7 +34,19 @@ module.exports = {
 
       {
         test: /\.styl(us)?$/,
-        use: ['vue-style-loader', 'css-loader', 'stylus-loader']
+        use: isProd
+          ? [
+              // {
+              //   loader: MiniCssExtractPlugin.loader,
+              //   options: {
+              //     publicPath: '/'
+              //   }
+              // },
+              'vue-style-loader',
+              'css-loader',
+              'stylus-loader'
+            ]
+          : ['vue-style-loader', 'css-loader', 'stylus-loader']
       },
 
       {
@@ -43,15 +54,17 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: '[name].[ext]?[hash]'
+          name: 'static/img/[name].[ext]?[hash]'
         }
       }
     ]
   },
-  plugins: [
-    new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].css'
-    })
-  ]
+  plugins: isProd
+    ? [
+        new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].css'
+        })
+      ]
+    : [new VueLoaderPlugin()]
 }

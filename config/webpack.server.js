@@ -1,7 +1,10 @@
+process.noDeprecation = true
+process.env.VUE_ENV = 'server'
+
 // 用于生成传递给 createBundleRenderer 的 server bundle
 const path = require('path')
-const webpack = require('webpack')
 const merge = require('webpack-merge')
+const nodeExternals = require('webpack-node-externals')
 const baseConfig = require('./webpack.base')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 
@@ -18,6 +21,13 @@ module.exports = merge(baseConfig, {
   output: {
     libraryTarget: 'commonjs2'
   },
+
+  externals: [
+    nodeExternals({
+      // dont't bundle node_modules
+      whitelist: [/\.css$/]
+    })
+  ],
 
   // 将服务器的整个输出构建为单个 JSON 文件，默认名：vue-ssr-server-bundle.json
   plugins: [new VueSSRServerPlugin()]
