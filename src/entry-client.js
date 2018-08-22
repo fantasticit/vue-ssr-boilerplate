@@ -42,6 +42,6 @@ router.onReady(_ => {
 
 // 注册 service-worker
 // location.protocol === 'https' &&
-if (window && location.protocol === 'https' && navigator.serviceWorker) {
-  navigator.serviceWorker.register('service-worker.js')
+if (window && navigator.serviceWorker) {
+  navigator.serviceWorker.register('/service-worker.js')
 }

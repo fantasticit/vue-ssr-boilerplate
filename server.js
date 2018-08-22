@@ -1,10 +1,10 @@
 const fs = require('fs')
+const mime = require('mime')
 const path = require('path')
 const Koa = require('koa')
 const KoaRouter = require('koa-router')
 const serve = require('koa-static')
 const mount = require('koa-mount')
-const mime = require('mime')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 const app = new Koa()
@@ -29,16 +29,19 @@ let readyPromise
 
 if (isProd) {
   const bundle = require('./dist/vue-ssr-server-bundle.json')
-  renderer = createRenderer(bundle)
+  const clientManifest = require('./dist/vue-ssr-client-manifest.json')
+  renderer = createRenderer(bundle, {
+    clientManifest
+  })
 } else {
-  readyPromise = require('./config/dev-server')(app, (bundle, options) => {
+  readyPromise = require('./build/dev-server')(app, (bundle, options) => {
     renderer = createRenderer(bundle, options)
   })
 }
 
 function serveStatic(filePath) {
   return async (ctx, next) => {
-    data = fs.createReadStream(path.resolve(__dirname, filePath))
+    const data = fs.createReadStream(path.resolve(__dirname, filePath))
     return (ctx.body = data)
   }
 }

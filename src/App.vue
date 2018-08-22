@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png" alt="">
-    <h1>Vue SSR</h1>
-    <router-link to="/">首页</router-link>
-    <router-link to="/page1">page1</router-link>
-    <router-link to="/page2">page2</router-link>
-    <router-link to="/page3">page3</router-link>
+    <div>
+      <router-link to="/">首页</router-link>
+      <router-link to="/page1">page1</router-link>
+      <router-link to="/page2">page2</router-link>
+      <router-link to="/page3">page3</router-link>
+    </div>
     <router-view></router-view>
   </div>
 </template>
@@ -18,6 +19,7 @@ export default {}
 #app {
   // background: url('./assets/bg.jpg');
   text-align: center;
+  margin-top: 60px;
 
   img {
     width: 120px;
