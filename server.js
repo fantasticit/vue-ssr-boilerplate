@@ -1,54 +1,47 @@
 const fs = require('fs')
-const mime = require('mime')
-const path = require('path')
 const Koa = require('koa')
 const KoaRouter = require('koa-router')
-const serve = require('koa-static')
-const mount = require('koa-mount')
 const { createBundleRenderer } = require('vue-server-renderer')
+
+const isProd = require('./utils/isProd')
+const { resolve } = require('./utils/path')
+const contentType = require('./middlewares/contentType')
+const serveStatic = require('./middlewares/serveStatic')
+const staticCache = require('./middlewares/staticCache')
+
+const templatePath = resolve('./index.template.html')
 
 const app = new Koa()
 const router = new KoaRouter()
-const port = parseInt(process.argv[2]) || 8080 // 可以通过 npm run dev 9090 形式指定端口号
-const templatePath = path.resolve(__dirname, './index.template.html')
 
-function createRenderer(bundle, options = {}) {
+const createRenderer = (bundle, opts = {}) => {
   return createBundleRenderer(
     bundle,
-    Object.assign(options, {
-      basedir: path.resolve(__dirname, './dist'),
-      runInNewContext: false,
-      template: fs.readFileSync(templatePath, 'utf-8')
+    Object.assign(opts, {
+      basedir: resolve('./dist'),
+      template: fs.readFileSync(templatePath, 'utf-8'),
+      runInNewContext: false
     })
   )
 }
 
-const isProd = process.env.NODE_ENV === 'production'
 let renderer
-let readyPromise
+let readyPromise // 开发环境时，要确认 webpack 已经打包客户端代码和服务端代码
 
 if (isProd) {
-  const bundle = require('./dist/vue-ssr-server-bundle.json')
-  const clientManifest = require('./dist/vue-ssr-client-manifest.json')
-  renderer = createRenderer(bundle, {
-    clientManifest
+  const prodBundle = require('./dist/vue-ssr-server-bundle.json')
+  const prodClientManifest = require('./dist/vue-ssr-client-manifest.json')
+  // 生成环境直接使用已经生成的 serverBundle 和 clientManifest
+  renderer = createRenderer(prodBundle, {
+    clientManifest: prodClientManifest
   })
 } else {
-  readyPromise = require('./build/dev-server')(app, (bundle, options) => {
-    renderer = createRenderer(bundle, options)
+  readyPromise = require('./build/dev-server')(app, (bundle, opts) => {
+    renderer = createRenderer(bundle, opts)
   })
 }
 
-function serveStatic(filePath) {
-  return async (ctx, next) => {
-    const data = fs.createReadStream(path.resolve(__dirname, filePath))
-    return (ctx.body = data)
-  }
-}
-
-router.get('/service-worker.js', serveStatic('./dist/service-worker.js'))
-router.get('/manifest.json', serveStatic('./manifest.json'))
-router.get('*', async ctx => {
+const render = async ctx => {
   const url = ctx.request.url
 
   const context = {
@@ -63,27 +56,21 @@ router.get('*', async ctx => {
       return (ctx.body = await renderer.renderToString(context))
     })
   }
-})
+}
 
-app.use(async (ctx, next) => {
-  const url = ctx.request.url
-  let ext = url.match(/\.\w+/g)
-  ext = (ext && ext.reverse()[0]) || null
-  let mimeType = mime.getType(ext) || 'text/html'
-  ctx.set('Content-Type', `${mimeType}; charset=utf-8`)
+router.get('/service-worker.js', staticCache(resolve('./dist/service-worker.js')))
+router.get('/manifest.json', staticCache(resolve('./manifest.json')))
+router.get('*', render)
 
-  await next()
-})
+app.use(contentType())
 app.use(
-  mount(
-    '/dist',
-    serve('dist', {
-      maxAge: isProd ? 365 * 24 * 60 * 60 : 0
-    })
-  )
+  serveStatic('/dist', 'dist', {
+    maxAge: isProd ? 365 * 24 * 60 * 60 : 0
+  })
 )
 app.use(router.routes())
 
+const port = parseInt(process.argv[2]) || 8080 // 可以通过 npm run dev 9090 形式指定端口号
 app.listen(port, err => {
   if (err) {
     throw err

@@ -13,7 +13,7 @@ export default {
 
 <style lang="stylus" scoped>
 div {
-  border: 5px red solid;
+  border: 5px red dashed;
   padding: 100px;
   margin-top: 20px;
 }
