@@ -1,5 +1,24 @@
 // 仅运行于浏览器
+import Vue from 'vue'
 import { createApp } from './app'
+
+// 全局混合，在客户端路由发生变化时，预取匹配组件数据
+Vue.mixin({
+  beforeRouteUpdate(to, from, next) {
+    const { asyncData } = this.$options
+
+    if (asyncData) {
+      asyncData({
+        store: this.$store,
+        route: to
+      })
+        .then(next)
+        .catch(next)
+    } else {
+      next()
+    }
+  }
+})
 
 const { app, router, store } = createApp()
 
@@ -15,13 +34,9 @@ router.onReady(_ => {
   router.beforeResolve((to, from, next) => {
     const matchedComponents = router.getMatchedComponents(to)
     const prevMatchedComponents = router.getMatchedComponents(from)
-    const activated = matchedComponents.filter(
-      (component, i) => component !== prevMatchedComponents[i]
-    )
+    const activated = matchedComponents.filter((component, i) => component !== prevMatchedComponents[i])
 
-    const activatedAsyncHooks = activated
-      .map(component => component && component.asyncData)
-      .filter(Boolean)
+    const activatedAsyncHooks = activated.map(component => component && component.asyncData).filter(Boolean)
 
     if (!activatedAsyncHooks.length) {
       return next()
