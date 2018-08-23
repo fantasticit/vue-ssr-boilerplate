@@ -1,7 +1,7 @@
 {
   "name": "vue-ssr-boilerplate",
   "version": "1.0.0",
-  "description": "A boilerplate for develop vue.js ssr application",
+  "description": "A boilerplate for developing Server Side Render Vue.js Application",
   "main": "index.js",
   "scripts": {
     "dev": "node server.js",
