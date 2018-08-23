@@ -17,12 +17,23 @@ export default {}
 
 <style lang="stylus">
 #app {
-  // background: url('./assets/bg.jpg');
   text-align: center;
   margin-top: 60px;
 
   img {
     width: 120px;
+  }
+
+  button {
+    padding: 6px 8px;
+    background: #4fc08d;
+    border: 1px solid #4fc08d;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    line-height: 1.5;
+    outline: none;
+    cursor: pointer;
   }
 }
 </style>

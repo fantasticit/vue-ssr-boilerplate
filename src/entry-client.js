@@ -43,7 +43,7 @@ router.onReady(_ => {
     }
 
     // 开始预取 数据
-    console.log('start fetching:')
+    notify('Prefetch data...')
     Promise.all(activatedAsyncHooks.map(hook => hook({ store, route: to })))
       .then(_ => {
         console.log('ok')
@@ -59,4 +59,18 @@ router.onReady(_ => {
 // location.protocol === 'https' &&
 if (window && navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js')
+}
+
+function notify(title) {
+  if (!('Notification' in window)) {
+    return
+  } else if (Notification.permission === 'granted') {
+    return new Notification(title)
+  } else {
+    Notification.requestPermission(permission => {
+      if (permission === 'granted') {
+        return new Notification(title)
+      }
+    })
+  }
 }

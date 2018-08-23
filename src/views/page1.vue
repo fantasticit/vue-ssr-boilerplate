@@ -1,15 +1,25 @@
 <template>
-  <div>Hello Page 1</div>
+  <div>
+    <h1>Page 1</h1>
+    <div>
+      <p>count： {{count}}</p>
+      <button @click="incrementCount">count +1</button>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {}
-</script>
+import { mapState, mapActions } from 'vuex'
 
-<style lang="stylus" scoped>
-div {
-  border: 5px green dashed;
-  padding: 100px;
-  margin-top: 20px;
+export default {
+  computed: {
+    ...mapState({
+      count: state => state.count
+    })
+  },
+
+  methods: {
+    ...mapActions(['incrementCount'])
+  }
 }
-</style>
+</script>

@@ -44,7 +44,23 @@ src
 
 ## 坑点提示
 
-1. 由于采用了服务端渲染，所有关于浏览器上属性的使用，需要首先判断 `window` 对象是否存在。
+### window 及其他浏览器环境下属性
+
+由于采用了服务端渲染，所有关于浏览器上属性的使用，需要首先判断 `window` 对象是否存在。
+
+### 单元测试
+
+默认采用 `jest` 和 `vue-test-utils` 进行测试，如果测试的组件需要用到 `vuex`，需要在测试的代码中新创建一个 `store` 传入，例如：
+
+```javascript
+import { createStore } from '@/store'
+
+const store = createStore()
+
+test('test', () => {
+  const wrapper = shallow(Component, { store })
+})
+```
 
 ## 其他
 
