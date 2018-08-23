@@ -3,6 +3,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 const isProd = require('../utils/isProd')
 const { resolve } = require('../utils/path')
 const ServerMiniCssExtractPlugin = require('../utils/miniCSSExtractPlugin')
+const generateStyleLoader = require('../utils/generateStyleLoader')
 
 module.exports = {
   mode: isProd ? 'production' : 'development',
@@ -10,6 +11,12 @@ module.exports = {
     path: resolve('./dist'),
     publicPath: '/dist/',
     filename: '[name].[hash].js'
+  },
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      '@': resolve('./src')
+    }
   },
   module: {
     rules: [
@@ -22,27 +29,30 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/
       },
-      {
-        test: /\.styl(us)?$/,
-        use: isProd
-          ? [
-              {
-                loader: ServerMiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: '/'
-                }
-              },
-              'css-loader',
-              'stylus-loader'
-            ]
-          : ['vue-style-loader', 'css-loader', 'stylus-loader']
-      },
+
+      generateStyleLoader('css', {
+        isProd,
+        publicPath: '/'
+      }),
+      generateStyleLoader('stylus', {
+        isProd,
+        publicPath: '/'
+      }),
+
       {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'url-loader',
         options: {
-          limit: 100,
+          limit: 3000,
           name: 'static/img/[name].[ext]?[hash]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 3000,
+          name: 'static/fonts/[name].[hash].[ext]'
         }
       }
     ]

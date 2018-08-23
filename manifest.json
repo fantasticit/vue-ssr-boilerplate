@@ -1,6 +1,6 @@
 {
-  "name": "Vue SSR boilerplate",
-  "short_name": "vue_ssr",
+  "name": "vue-ssr-boilerplate",
+  "short_name": "vue-ssr",
   "start_url": "/",
   "display": "standalone"
 }
