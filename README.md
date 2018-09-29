@@ -1,3 +1,10 @@
+<p align="center">
+  <br>
+  <img width="200" src="http://pcj3271t7.bkt.clouddn.com/logo-2.png" alt="logo of vue-ssr-bolilerplate repository">
+  <br>
+  <br>
+</p>
+
 # vue-ssr-boilerplate
 
 ### A boilerplate for developing Server Side Render Vue.js Application

@@ -45,7 +45,7 @@ const render = async ctx => {
   const url = ctx.request.url
 
   const context = {
-    title: 'Vue-SSR',
+    title: 'vue-ssr-boilerplate',
     url
   }
 
@@ -58,7 +58,10 @@ const render = async ctx => {
   }
 }
 
-router.get('/service-worker.js', staticCache(resolve('./dist/service-worker.js')))
+router.get(
+  '/service-worker.js',
+  staticCache(resolve('./dist/service-worker.js'))
+)
 router.get('/manifest.json', staticCache(resolve('./manifest.json')))
 router.get('*', render)
 

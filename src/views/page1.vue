@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <h1>Page 1</h1>
-    <div>
+  <div class="container">
+    <h1>测试页 1</h1>
+    <h3>点击下方按钮</h3>
+    <div :style="'{text-align: center}'">
       <p>count： {{count}}</p>
       <button @click="incrementCount">count +1</button>
     </div>

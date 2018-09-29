@@ -1,5 +1,7 @@
 <template>
-  <h1>404</h1>
+  <div class="container">
+    <h1>404 界面</h1>
+  </div>
 </template>
 
 <script>

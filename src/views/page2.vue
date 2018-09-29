@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <h1>Page 2</h1>
+  <div class="container">
+    <h1>测试页2</h1>
+    <h3>点击下方按钮</h3>
     <div>
       <p>count： {{count}}</p>
       <button @click="decrementCount">count -1</button>

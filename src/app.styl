@@ -1,0 +1,168 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#app {
+  // text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    padding: 6px 8px;
+    background: #4fc08d;
+    border: 1px solid #4fc08d;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    line-height: 1.5;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+header {
+  height: 80px;
+  box-shadow: 0 4px 13px -3px rgba(0, 0, 0, 0.10196);
+  border-bottom: 1px solid #d2d2d2;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+
+  > div {
+    height: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .logo {
+    padding: 5px;
+    height: 100%;
+    margin-right: 2rem;
+
+    img {
+      max-height: 100%;
+    }
+  }
+
+  nav {
+    height: 100%;
+    vertical-align: middle;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+
+    li {
+      position: relative;
+      display: block;
+      padding: 0 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        display: block;
+        width: 0;
+        height: 2px;
+        background: #4fc08d;
+        will-change: width;
+        transition: width 300ms ease-in-out;
+      }
+
+      &:hover {
+        color: #4fc08d;
+
+        &::after {
+          width: 100%;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
+    li.router-link-exact-active {
+      color: #4fc08d;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+main {
+  flex: 1;
+  background: #fafafa;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+
+  > div {
+    border-radius: 4px;
+    padding: 15px;
+    border: 1px solid #e1e4e8;
+    overflow: auto;
+    background: #fff;
+  }
+}
+
+footer {
+  padding: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  p {
+    text-align: center;
+  }
+
+  a {
+    color: #4fc08d;
+  }
+}

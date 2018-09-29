@@ -8,7 +8,9 @@ export function createRouter() {
     mode: 'history',
     routes: [
       {
-        path: '/'
+        path: '/',
+        component: () =>
+          import(/* webpackChunkName: 'home' */ '../views/home.vue')
       },
 
       {
