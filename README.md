@@ -115,3 +115,7 @@ test('test', () => {
 ## 5 其他
 
 - 如果未来需要使用到“页面缓存或组件缓存”，可参考：[缓存](https://ssr.vuejs.org/zh/guide/caching.html#%E9%A1%B5%E9%9D%A2%E7%BA%A7%E5%88%AB%E7%BC%93%E5%AD%98-page-level-caching)
+
+## LICENSE
+
+MIT
