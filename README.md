@@ -2,19 +2,19 @@
 
 ### A boilerplate for developing Server Side Render Vue.js Application
 
-## 服务端渲染介绍
+## 1. 服务端渲染介绍
 
 参考文章：[Vue SSR 渲染指南](https://ssr.vuejs.org)
 
-## 如何使用
+## 2. 如何使用
 
 使用的前提是安装依赖,即: `npm i`.
 
-### 开发模式
+### 2.1 开发模式
 
 执行 `npm run dev` 即可.
 
-### 生产模式
+### 2.2 生产模式
 
 生产模式,首先进行打包,然后再运行相关服务,即:
 
@@ -49,10 +49,14 @@ new SWPrecachePlugin({
 }
 ```
 
-存在的问题,当浏览器访问 `https://example.com/` 时,注册的 service-worker 是域是`https://example.com/`,是不能访问直接浏览器输入 `https://example.com/page1`的.解决办法: 浏览器新标签直接访问`https://example.com/page1`(直接访问走的是 服务端的路由匹配,即 `entry-server`),将该域的 service-worker 注册,其他路由同理.
-希望有懂这一块的小伙伴帮忙解决.
+存在的问题:
+当浏览器访问 `https://example.com/` 时,注册的 service-worker 的域是 `https://example.com/` ,是不能直接浏览器输入 `https://example.com/page1` 来访问 `/page1` 这个路由的的.
 
-## 源码结构
+解决办法: 浏览器新标签直接访问 `https://example.com/page1` (直接访问走的是 服务端的路由匹配,即 `entry-server`), 将该域的 service-worker 注册,其他路由同理.
+
+希望有懂这一块的小伙伴可以帮忙解决.(:
+
+## 3 源码结构
 
 服务端渲染应当为每个请求创建一个新的根 Vue 实例。如果在多个请求之间共享一个实例，显然是错误的。所以所有的根实例、根路由、根状态都应当是一个工厂函数，每次请求都应当得到一个新的根实例。
 
@@ -88,13 +92,13 @@ src
 
 再次强调，如果使用了 `vue-router`、`vuex` 等，需要导出的均是一个工厂函数，而不是一个单例。
 
-## 坑点提示
+## 4 坑点提示
 
-### window 及其他浏览器环境下属性
+### 4.1 window 及其他浏览器环境下属性
 
 由于采用了服务端渲染，所有关于浏览器上属性的使用，需要首先判断 `window` 对象是否存在。
 
-### 单元测试
+### 4.2 单元测试
 
 默认采用 `jest` 和 `vue-test-utils` 进行测试，如果测试的组件需要用到 `vuex`，需要在测试的代码中新创建一个 `store` 传入，例如：
 
@@ -108,6 +112,6 @@ test('test', () => {
 })
 ```
 
-## 其他
+## 5 其他
 
 - 如果未来需要使用到“页面缓存或组件缓存”，可参考：[缓存](https://ssr.vuejs.org/zh/guide/caching.html#%E9%A1%B5%E9%9D%A2%E7%BA%A7%E5%88%AB%E7%BC%93%E5%AD%98-page-level-caching)
