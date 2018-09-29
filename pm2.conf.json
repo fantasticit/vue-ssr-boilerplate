@@ -1,0 +1,7 @@
+{
+  "name": "vue-ssr-boilerplate",
+  "script": "./server.js",
+  "cwd": "./",
+  "ignore_watch": ["node_modules", "log"],
+  "error_file": "./log/error.log"
+}
