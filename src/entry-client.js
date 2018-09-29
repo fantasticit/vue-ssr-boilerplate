@@ -34,9 +34,13 @@ router.onReady(_ => {
   router.beforeResolve((to, from, next) => {
     const matchedComponents = router.getMatchedComponents(to)
     const prevMatchedComponents = router.getMatchedComponents(from)
-    const activated = matchedComponents.filter((component, i) => component !== prevMatchedComponents[i])
+    const activated = matchedComponents.filter(
+      (component, i) => component !== prevMatchedComponents[i]
+    )
 
-    const activatedAsyncHooks = activated.map(component => component && component.asyncData).filter(Boolean)
+    const activatedAsyncHooks = activated
+      .map(component => component && component.asyncData)
+      .filter(Boolean)
 
     if (!activatedAsyncHooks.length) {
       return next()
@@ -56,8 +60,7 @@ router.onReady(_ => {
 })
 
 // 注册 service-worker
-// location.protocol === 'https' &&
-if (window && navigator.serviceWorker) {
+if (window && location.protocol === 'https' && navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js')
 }
 

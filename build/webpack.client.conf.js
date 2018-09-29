@@ -87,7 +87,20 @@ if (isProd) {
       // 设置为 false, sw生成的缓存是 filename?hash 形式，以便于浏览器更新缓存
       dontCacheBustUrlsMatching: false,
       // 忽略文件
-      staticFileGlobsIgnorePatterns: [/\.map$/, /\.css$/]
+      staticFileGlobsIgnorePatterns: [/\.map$/, /\.css$/],
+      // For unknown URLs, fallback to the index page
+      navigateFallback: 'https://example/',
+      // 运行时缓存
+      runtimeCaching: [
+        {
+          urlPattern: '/',
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: /\/(page1|page2|page3)/,
+          handler: 'networkFirst'
+        }
+      ]
     })
   )
 }

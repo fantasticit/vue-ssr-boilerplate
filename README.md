@@ -6,6 +6,52 @@
 
 参考文章：[Vue SSR 渲染指南](https://ssr.vuejs.org)
 
+## 如何使用
+
+使用的前提是安装依赖,即: `npm i`.
+
+### 开发模式
+
+执行 `npm run dev` 即可.
+
+### 生产模式
+
+生产模式,首先进行打包,然后再运行相关服务,即:
+
+```shell
+npm run build && npm start # 如果线上使用 pm2,也可以用 npm run pm2
+```
+
+生产模式如果要启用 `service-worker(pwa)`,首先确保部署时采用了 `https` 协议,然后修改 `build/webpack.client.conf.js` 中 SWPlugin 相关配置,例如:
+
+```javascript
+new SWPrecachePlugin({
+  cacheId: 'vue-ssr-justemit',
+  filename: 'service-worker.js',
+  minify: true,
+  // 设置为 false, sw生成的缓存是 filename?hash 形式，以便于浏览器更新缓存
+  dontCacheBustUrlsMatching: false,
+  // 忽略文件
+  staticFileGlobsIgnorePatterns: [/\.map$/, /\.css$/],
+  // For unknown URLs, fallback to the index page
+  navigateFallback: 'https://example/', // 这里修改为 线上部署的地址
+  // 运行时缓存
+  runtimeCaching: [ // 这里修改为您实际开发时所需要的相关路由
+    {
+      urlPattern: '/',
+      handler: 'networkFirst'
+    },
+    {
+      urlPattern: /\/(page1|page2|page3)/,
+      handler: 'networkFirst'
+    }
+  ]
+}
+```
+
+存在的问题,当浏览器访问 `https://example.com/` 时,注册的 service-worker 是域是`https://example.com/`,是不能访问直接浏览器输入 `https://example.com/page1`的.解决办法: 浏览器新标签直接访问`https://example.com/page1`(直接访问走的是 服务端的路由匹配,即 `entry-server`),将该域的 service-worker 注册,其他路由同理.
+希望有懂这一块的小伙伴帮忙解决.
+
 ## 源码结构
 
 服务端渲染应当为每个请求创建一个新的根 Vue 实例。如果在多个请求之间共享一个实例，显然是错误的。所以所有的根实例、根路由、根状态都应当是一个工厂函数，每次请求都应当得到一个新的根实例。
