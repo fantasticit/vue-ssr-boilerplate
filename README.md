@@ -7,6 +7,8 @@
 
 # vue-ssr-boilerplate
 
+> 仅用于学习，生产环境请使用官方更加完善的渲染框架 [nuxt.js](https://github.com/nuxt/nuxt.js) 。
+
 ### A boilerplate for developing Server Side Render Vue.js Application
 
 ## 1. 服务端渲染介绍
